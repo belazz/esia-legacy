@@ -162,7 +162,73 @@ class OpenId
         $this->logger->debug('Payload: ', $payload);
 
         $token = $payload['access_token'];
+        $refreshToken = $payload['refresh_token'];
+
         $this->config->setToken($token);
+        $this->config->setRefreshToken($refreshToken);
+
+        # get object id from token
+        $chunks = explode('.', $token);
+        $payload = json_decode($this->base64UrlSafeDecode($chunks[1]), true);
+        $this->config->setOid($payload['urn:esia:sbj_id']);
+
+        return $token;
+    }
+
+    /**
+     * Get a new token using the refresh token
+     * The method is quite similar to the getToken(), except 2 new parameters:
+     * refresh_token = $refreshToken
+     * grant_type = 'refresh_token'
+     * http://minsvyaz.ru/uploaded/presentations/mr-esia-237.pdf
+     *
+     * @return string
+     *
+     * @throws SignFailException
+     * @throws AbstractEsiaException
+     */
+    public function refreshToken(): string {
+        $timestamp = $this->getTimeStamp();
+        $state = $this->buildState();
+
+        $clientSecret = $this->signer->sign(
+            $this->config->getScopeString()
+            . $timestamp
+            . $this->config->getClientId()
+            . $state
+        );
+
+        $body = [
+            'client_id' => $this->config->getClientId(),
+            'refresh_token' => $this->config->getRefreshToken(),
+            'grant_type' => 'refresh_token',
+            'client_secret' => $clientSecret,
+            'state' => $state,
+            'redirect_uri' => $this->config->getRedirectUrl(),
+            'scope' => $this->config->getScopeString(),
+            'timestamp' => $timestamp,
+            'token_type' => 'Bearer',
+        ];
+
+        $payload = $this->sendRequest(
+            new Request(
+                'POST',
+                $this->config->getTokenUrl(),
+                [
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                ],
+                http_build_query($body)
+            )
+        );
+
+        $this->logger->debug('Payload: ', $payload);
+
+        $token = $payload['access_token'];
+        $this->config->setToken($token);
+
+        // previous refresh token is consumed upon refreshing, storing the new one
+        $refreshToken = $payload['refresh_token'];
+        $this->config->setRefreshToken($refreshToken);
 
         # get object id from token
         $chunks = explode('.', $token);

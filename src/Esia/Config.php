@@ -37,7 +37,9 @@ class Config
     private $accessType = 'offline';
 
     private $token = '';
+    private $tokenExpiresIn = '';
     private $oid = '';
+    private $refreshToken = '';
 
     /**
      * Config constructor.
@@ -82,6 +84,8 @@ class Config
         $this->accessType = $config['accessType'] ?? $this->accessType;
         $this->tmpPath = $config['tmpPath'] ?? $this->tmpPath;
         $this->token = $config['token'] ?? $this->token;
+        $this->refreshToken = $config['refreshToken'] ?? $this->refreshToken;
+        $this->tokenExpiresIn = $config['tokenExpiresIn'] ?? $this->tokenExpiresIn;
     }
 
     public function getPortalUrl(): string
@@ -144,9 +148,29 @@ class Config
         return $this->token;
     }
 
+    /*
+     * Returns expiration time in seconds
+     */
+    public function getTokenExpiresIn(): ?string {
+        return $this->tokenExpiresIn;
+    }
+
     public function setToken(string $token): void
     {
         $this->token = $token;
+    }
+
+    public function setTokenExpiresIn(string $seconds): void {
+        $this->tokenExpiresIn = $seconds;
+    }
+
+
+    public function getRefreshToken(): ?string {
+        return $this->refreshToken;
+    }
+
+    public function setRefreshToken(string $refreshToken): void {
+        $this->refreshToken = $refreshToken;
     }
 
     public function getClientId(): string
