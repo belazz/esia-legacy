@@ -9,17 +9,26 @@
 В этом форке был добавлена возможность обновлять access_token с помощью refresh_token'ов
 Также при успешной авторизации значения refresh_token и expires_in сохраняются в память - есть возможность сохранить их в БД/сессию и тд 
 
-# Установка
+# Composer
 
-При помощи [composer](https://getcomposer.org/download/):
-```
-composer require --prefer-dist fr05t1k/esia
-```
-Или добавьте в composer.json
+[Composer](https://getcomposer.org/download/)
 
+В composer.json добавить строчки:
 ```
-"fr05t1k/esia" : "^2.0"
+      "repositories": [{
+          "type": "vcs",
+          "url": "http://github.com/belazz/esia"
+      }],
+      
+      "require": {
+              ...
+              "fr05t1k/esia": "dev-master",
+              ...
+      },
 ```
+
+В данном случае master - имя нужной нам ветки форка, а префикс dev- -- обязателен для того, чтобы composer понял что откуда пулить. 
+Для тех кто хочет форкнуть - САМУ ВЕТКУ ФОРКА не обязательно называть с префиксом dev- 
 
 # Как использовать 
 
