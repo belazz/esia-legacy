@@ -6,6 +6,9 @@
 # Описание
 Компонент для авторизации на портале "Госуслуги"
 
+В этом форке был добавлена возможность обновлять access_token с помощью refresh_token'ов
+Также при успешной авторизации значения refresh_token и expires_in сохраняются в память - есть возможность сохранить их в БД/сессию и тд 
+
 # Установка
 
 При помощи [composer](https://getcomposer.org/download/):
@@ -56,7 +59,28 @@ $contactInfo = $esia->getContactInfo();
 $documentInfo = $esia->getDocInfo();
 
 ```
+## Обновление токена
+```
+    $refreshToken = $config->getRefreshToken(); // для получения сохраненного при реквесте refresh_token'a
+    $newAccessToken = $esia->refreshToken($refreshToken); // получение нового access_token'a с помощью refresh_token'a
+```
+## Получение значения expires_in
+Также возвращаемое кол-во секунд expires_in сохраняется в Config $config объект, доступно через:
+```
+    $config->getTokenExpiresIn();    
+```  
+Проверку актуальный ли ещё токен нужно реализовать самому. Например, с использованием Carbon:
+```
+    return Carbon::now() < Carbon::now()->addSeconds($config->getTokenExpiresIn());    
+```
+expires_in должен быть сохранен в каком-либо хранилище (также как и access_token, refresh_token и oid), соотв. при сравнении забираем его оттуда
 # Конфиг
+
+`token` - access_token 
+
+`refreshToken` - refresh_token (нужен для запроса нового access_token без участия пользователя)
+
+`tokenExpiresIn` - через сколько действие access_token'a закончится, указывается в секундах
 
 `clientId` - ID вашего приложения.
 
