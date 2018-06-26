@@ -163,9 +163,11 @@ class OpenId
 
         $token = $payload['access_token'];
         $refreshToken = $payload['refresh_token'];
+        $expiresIn = $payload['expires_in'];
 
         $this->config->setToken($token);
         $this->config->setRefreshToken($refreshToken);
+        $this->config->setTokenExpiresIn($expiresIn);
 
         # get object id from token
         $chunks = explode('.', $token);
@@ -229,6 +231,9 @@ class OpenId
         // previous refresh token is consumed upon refreshing, storing the new one
         $refreshToken = $payload['refresh_token'];
         $this->config->setRefreshToken($refreshToken);
+
+        $expiresIn = $payload['expires_in'];
+        $this->config->setTokenExpiresIn($expiresIn);
 
         # get object id from token
         $chunks = explode('.', $token);
