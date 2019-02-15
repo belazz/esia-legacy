@@ -17,7 +17,9 @@
 
 # Composer
 
+```
 composer require belazz/esia-legacy
+```
 
 # Как использовать 
 
