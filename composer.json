@@ -1,11 +1,12 @@
 {
-  "name": "fr05t1k/esia",
+  "name": "belazz/esia-legacy",
   "license": "MIT",
   "description": "OpenID ESIA authenticating",
   "keywords": [
     "esia",
     "openid",
-    "egov"
+    "egov",
+    "php55"
   ],
   "autoload": {
     "psr-4": {
@@ -18,7 +19,7 @@
     }
   },
   "require": {
-    "php": "^7.1",
+    "php": "^5.5",
     "guzzlehttp/guzzle": "^6.1.0",
     "psr/log": "^1.0",
     "psr/http-message": "^1.0",
