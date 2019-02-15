@@ -11,5 +11,5 @@ interface SignerInterface
      * @return string
      * @throws SignFailException
      */
-    public function sign(string $message): string;
+    public function sign($message);
 }

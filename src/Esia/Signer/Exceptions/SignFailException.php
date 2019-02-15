@@ -6,7 +6,7 @@ use Esia\Exceptions\AbstractEsiaException;
 
 class SignFailException extends AbstractEsiaException
 {
-    protected function getMessageForCode(int $code): string
+    protected function getMessageForCode($code)
     {
         return 'Signing is failed';
     }

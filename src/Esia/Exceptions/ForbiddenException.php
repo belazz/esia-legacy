@@ -4,7 +4,7 @@ namespace Esia\Exceptions;
 
 class ForbiddenException extends AbstractEsiaException
 {
-    protected function getMessageForCode(int $code): string
+    protected function getMessageForCode($code)
     {
         return 'Forbidden';
     }

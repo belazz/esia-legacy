@@ -45,7 +45,7 @@ class GuzzleHttpClient implements ClientInterface
      *
      * @throws \Psr\Http\Client\ClientException If an error happens during processing the request.
      */
-    public function sendRequest(RequestInterface $request): ResponseInterface
+    public function sendRequest(RequestInterface $request)
     {
         try {
             return $this->guzzle->send($request);

@@ -45,16 +45,16 @@ class SignerPKCS7 implements SignerInterface
 
     /**
      * SignerPKCS7 constructor.
-     * @param string $certPath
-     * @param string $privateKeyPath
-     * @param string $privateKeyPassword
-     * @param string $tmpPath
+     * @param $certPath
+     * @param $privateKeyPath
+     * @param $privateKeyPassword
+     * @param $tmpPath
      */
     public function __construct(
-        string $certPath,
-        string $privateKeyPath,
-        ?string $privateKeyPassword,
-        string $tmpPath
+        $certPath,
+        $privateKeyPath,
+        $privateKeyPassword,
+        $tmpPath
     ) {
         $this->certPath = $certPath;
         $this->privateKeyPath = $privateKeyPath;
@@ -64,11 +64,11 @@ class SignerPKCS7 implements SignerInterface
     }
 
     /**
-     * @param string $message
+     * @param $message
      * @return string
      * @throws SignFailException
      */
-    public function sign(string $message): string
+    public function sign($message)
     {
         $this->checkFilesExists();
 
@@ -129,7 +129,7 @@ class SignerPKCS7 implements SignerInterface
     /**
      * @throws SignFailException
      */
-    private function checkFilesExists(): void
+    private function checkFilesExists()
     {
         if (!file_exists($this->certPath)) {
             throw new NoSuchCertificateFileException('Certificate does not exist');
@@ -156,7 +156,7 @@ class SignerPKCS7 implements SignerInterface
      *
      * @return string
      */
-    private function getRandomString(): string
+    private function getRandomString()
     {
         return md5(uniqid(mt_rand(), true));
     }
@@ -164,10 +164,10 @@ class SignerPKCS7 implements SignerInterface
     /**
      * Url safe for base64
      *
-     * @param string $string
+     * @param $string
      * @return string
      */
-    private function urlSafe($string): string
+    private function urlSafe($string)
     {
         return rtrim(strtr(trim($string), '+/', '-_'), '=');
     }

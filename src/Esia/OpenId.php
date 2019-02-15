@@ -48,7 +48,7 @@ class OpenId
     public function __construct(Config $config, ClientInterface $client = null)
     {
         $this->config = $config;
-        $this->client = $client ?? new GuzzleHttpClient(new Client());
+        $this->client = $client ?: new GuzzleHttpClient(new Client());
         $this->logger = new NullLogger();
         $this->signer = new SignerPKCS7(
             $config->getCertPath(),
@@ -61,7 +61,7 @@ class OpenId
     /**
      * @param SignerInterface $signer
      */
-    public function setSigner(SignerInterface $signer): void
+    public function setSigner(SignerInterface $signer)
     {
         $this->signer = $signer;
     }
@@ -71,7 +71,7 @@ class OpenId
      *
      * @return Config
      */
-    public function getConfig(): Config
+    public function getConfig()
     {
         return $this->config;
     }
@@ -118,12 +118,12 @@ class OpenId
     /**
      * Method collect a token with given code
      *
-     * @param string $code
+     * @param $code
      * @return string
      * @throws SignFailException
      * @throws AbstractEsiaException
      */
-    public function getToken(string $code): string
+    public function getToken($code)
     {
         $timestamp = $this->getTimeStamp();
         $state = $this->buildState();
@@ -189,7 +189,7 @@ class OpenId
      * @throws SignFailException
      * @throws AbstractEsiaException
      */
-    public function refreshToken(): string {
+    public function refreshToken() {
         $timestamp = $this->getTimeStamp();
         $state = $this->buildState();
 
@@ -252,7 +252,7 @@ class OpenId
      * @return null|array
      * @throws AbstractEsiaException
      */
-    public function getPersonInfo(): array
+    public function getPersonInfo()
     {
         $url = $this->config->getPersonUrl();
 
@@ -269,7 +269,7 @@ class OpenId
      * @throws Exceptions\InvalidConfigurationException
      * @throws AbstractEsiaException
      */
-    public function getContactInfo(): array
+    public function getContactInfo()
     {
         $url = $this->config->getPersonUrl() . '/ctts';
         $payload = $this->sendRequest(new Request('GET', $url));
@@ -292,7 +292,7 @@ class OpenId
      * @throws Exceptions\InvalidConfigurationException
      * @throws AbstractEsiaException
      */
-    public function getAddressInfo(): array
+    public function getAddressInfo()
     {
         $url = $this->config->getPersonUrl() . '/addrs';
         $payload = $this->sendRequest(new Request('GET', $url));
@@ -314,7 +314,7 @@ class OpenId
      * @throws Exceptions\InvalidConfigurationException
      * @throws AbstractEsiaException
      */
-    public function getDocInfo(): array
+    public function getDocInfo()
     {
         $url = $this->config->getPersonUrl() . '/docs';
 
@@ -336,7 +336,7 @@ class OpenId
      * @return array
      * @throws AbstractEsiaException
      */
-    private function collectArrayElements($elements): array
+    private function collectArrayElements($elements)
     {
         $result = [];
         foreach ($elements as $elementUrl) {
@@ -356,7 +356,7 @@ class OpenId
      * @return array
      * @throws AbstractEsiaException
      */
-    private function sendRequest(RequestInterface $request): array
+    private function sendRequest(RequestInterface $request)
     {
         try {
             if ($this->config->getToken()) {
@@ -401,7 +401,7 @@ class OpenId
     /**
      * @return string
      */
-    private function getTimeStamp(): string
+    private function getTimeStamp()
     {
         return date('Y.m.d H:i:s O');
     }
@@ -413,7 +413,7 @@ class OpenId
      * @return string
      * @throws SignFailException
      */
-    private function buildState(): string
+    private function buildState()
     {
         try {
             return sprintf(
@@ -435,10 +435,10 @@ class OpenId
     /**
      * Url safe for base64
      *
-     * @param string $string
+     * @param $string
      * @return string
      */
-    private function base64UrlSafeDecode($string): string
+    private function base64UrlSafeDecode($string)
     {
         $base64 = strtr($string, '-_', '+/');
 
