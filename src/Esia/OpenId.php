@@ -417,14 +417,14 @@ class OpenId
         try {
             return sprintf(
                 '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-                $this->random_int_polyfill(0, 0xffff),
-                $this->random_int_polyfill(0, 0xffff),
-                $this->random_int_polyfill(0, 0xffff),
-                $this->random_int_polyfill(0, 0x0fff) | 0x4000,
-                $this->random_int_polyfill(0, 0x3fff) | 0x8000,
-                $this->random_int_polyfill(0, 0xffff),
-                $this->random_int_polyfill(0, 0xffff),
-                $this->random_int_polyfill(0, 0xffff)
+                random_int(0, 0xffff),
+                random_int(0, 0xffff),
+                random_int(0, 0xffff),
+                random_int(0, 0x0fff) | 0x4000,
+                random_int(0, 0x3fff) | 0x8000,
+                random_int(0, 0xffff),
+                random_int(0, 0xffff),
+                random_int(0, 0xffff)
             );
         } catch (\Exception $e) {
             throw new CannotGenerateRandomIntException('Cannot generate random integer', $e);
@@ -442,50 +442,5 @@ class OpenId
         $base64 = strtr($string, '-_', '+/');
 
         return base64_decode($base64);
-    }
-
-    private function random_int_polyfill($min, $max) {
-        if (!function_exists('mcrypt_create_iv')) {
-            trigger_error(
-                'mcrypt must be loaded for $this->random_int_polyfill to work',
-                E_USER_WARNING
-            );
-            return null;
-        }
-
-        if (!is_int($min) || !is_int($max)) {
-            trigger_error('$min and $max must be integer values', E_USER_NOTICE);
-            $min = (int)$min;
-            $max = (int)$max;
-        }
-
-        if ($min > $max) {
-            trigger_error('$max can\'t be lesser than $min', E_USER_WARNING);
-            return null;
-        }
-
-        $range = $counter = $max - $min;
-        $bits = 1;
-
-        while ($counter >>= 1) {
-            ++$bits;
-        }
-
-        $bytes = (int)max(ceil($bits/8), 1);
-        $bitmask = pow(2, $bits) - 1;
-
-        if ($bitmask >= PHP_INT_MAX) {
-            $bitmask = PHP_INT_MAX;
-        }
-
-        do {
-            $result = hexdec(
-                    bin2hex(
-                        mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM)
-                    )
-                ) & $bitmask;
-        } while ($result > $range);
-
-        return $result + $min;
     }
 }
