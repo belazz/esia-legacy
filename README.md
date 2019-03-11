@@ -17,24 +17,9 @@
 
 # Composer
 
-[Composer](https://getcomposer.org/download/)
-
-В composer.json добавить строчки:
 ```
-      "repositories": [{
-          "type": "vcs",
-          "url": "http://github.com/belazz/esia"
-      }],
-      
-      "require": {
-              ...
-              "fr05t1k/esia": "dev-master",
-              ...
-      },
+composer require belazz/esia-legacy
 ```
-
-В данном случае master - имя нужной нам ветки форка, а префикс dev- -- обязателен для того, чтобы composer понял что откуда пулить. 
-Для тех кто хочет форкнуть - САМУ ВЕТКУ ФОРКА не обязательно называть с префиксом dev- 
 
 # Как использовать 
 
