@@ -5,11 +5,10 @@ namespace Esia\Http;
 use Esia\Http\Exceptions\HttpException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class GuzzleHttpClient implements ClientInterface
+class GuzzleHttpClient
 {
     /**
      * @var Client
