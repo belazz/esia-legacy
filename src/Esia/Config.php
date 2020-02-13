@@ -11,6 +11,8 @@ class Config
     private $privateKeyPath;
     private $certPath;
 
+    private $useCli = false;
+
     private $portalUrl = 'http://esia-portal1.test.gosuslugi.ru/';
     private $tokenUrlPath = 'aas/oauth2/te';
     private $codeUrlPath = 'aas/oauth2/ac';
@@ -68,6 +70,8 @@ class Config
         if (!$this->certPath) {
             throw new InvalidConfigurationException('Please provide certPath');
         }
+
+        $this->useCli = isset($config['useCli']) ? $config['useCli'] : $this->useCli;
 
         $this->portalUrl = isset($config['portalUrl']) ? $config['portalUrl'] : $this->portalUrl;
         $this->tokenUrlPath = isset($config['tokenUrlPath']) ? $config['tokenUrlPath'] : $this->tokenUrlPath;
@@ -209,5 +213,13 @@ class Config
             throw new InvalidConfigurationException('Please provide oid');
         }
         return $this->portalUrl . $this->personUrlPath . '/' . $this->oid;
+    }
+
+    /**
+     * Return a param telling us whether we should use CliSignerPKCS7 for signing requests.
+     * @return bool
+     */
+    public function getUseCli() {
+        return $this->useCli;
     }
 }
