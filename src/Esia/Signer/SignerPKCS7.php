@@ -3,66 +3,10 @@
 namespace Esia\Signer;
 
 use Esia\Signer\Exceptions\CannotReadCertificateException;
-use Esia\Signer\Exceptions\CannotReadPrivateKeyException;
-use Esia\Signer\Exceptions\NoSuchCertificateFileException;
-use Esia\Signer\Exceptions\NoSuchKeyFileException;
-use Esia\Signer\Exceptions\NoSuchTmpDirException;
 use Esia\Signer\Exceptions\SignFailException;
-use Psr\Log\LoggerAwareTrait;
-use Psr\Log\NullLogger;
 
-class SignerPKCS7 implements SignerInterface
+class SignerPKCS7 extends AbstractSignerPKCS7 implements SignerInterface
 {
-    use LoggerAwareTrait;
-
-    /**
-     * Path to the certificate
-     *
-     * @var string
-     */
-    private $certPath;
-
-    /**
-     * Path to the private key
-     *
-     * @var string
-     */
-    private $privateKeyPath;
-
-    /**
-     * Password for the private key
-     *
-     * @var string
-     */
-    private $privateKeyPassword;
-
-    /**
-     * Temporary directory for message signing (must me writable)
-     *
-     * @var string
-     */
-    private $tmpPath;
-
-    /**
-     * SignerPKCS7 constructor.
-     * @param $certPath
-     * @param $privateKeyPath
-     * @param $privateKeyPassword
-     * @param $tmpPath
-     */
-    public function __construct(
-        $certPath,
-        $privateKeyPath,
-        $privateKeyPassword,
-        $tmpPath
-    ) {
-        $this->certPath = $certPath;
-        $this->privateKeyPath = $privateKeyPath;
-        $this->privateKeyPassword = $privateKeyPassword;
-        $this->tmpPath = $tmpPath;
-        $this->logger = new NullLogger();
-    }
-
     /**
      * @param $message
      * @return string
@@ -124,51 +68,5 @@ class SignerPKCS7 implements SignerInterface
         unlink($messageFile);
 
         return $sign;
-    }
-
-    /**
-     * @throws SignFailException
-     */
-    private function checkFilesExists()
-    {
-        if (!file_exists($this->certPath)) {
-            throw new NoSuchCertificateFileException('Certificate does not exist');
-        }
-        if (!is_readable($this->certPath)) {
-            throw new CannotReadCertificateException('Cannot read the certificate');
-        }
-        if (!file_exists($this->privateKeyPath)) {
-            throw new NoSuchKeyFileException('Private key does not exist');
-        }
-        if (!is_readable($this->privateKeyPath)) {
-            throw new CannotReadPrivateKeyException('Cannot read the private key');
-        }
-        if (!file_exists($this->tmpPath)) {
-            throw new NoSuchTmpDirException('Temporary folder is not found');
-        }
-        if (!is_writable($this->tmpPath)) {
-            throw new NoSuchTmpDirException('Temporary folder is not writable');
-        }
-    }
-
-    /**
-     * Generate random unique string
-     *
-     * @return string
-     */
-    private function getRandomString()
-    {
-        return md5(uniqid(mt_rand(), true));
-    }
-
-    /**
-     * Url safe for base64
-     *
-     * @param $string
-     * @return string
-     */
-    private function urlSafe($string)
-    {
-        return rtrim(strtr(trim($string), '+/', '-_'), '=');
     }
 }

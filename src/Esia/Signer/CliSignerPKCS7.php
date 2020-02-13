@@ -3,12 +3,9 @@
 namespace Esia\Signer;
 
 use Esia\Signer\Exceptions\SignFailException;
-use Psr\Log\LoggerAwareTrait;
 
 class CliSignerPKCS7 extends AbstractSignerPKCS7 implements SignerInterface
 {
-    use LoggerAwareTrait;
-
     /**
      * @param string $message
      * @return string
